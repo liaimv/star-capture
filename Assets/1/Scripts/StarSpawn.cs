@@ -12,9 +12,9 @@ public class StarSpawn : MonoBehaviour
     public float minDistanceBetweenStars = 0.6f;
     public int maxStars = 50;
 
-    private List<GameObject> spawnedStars = new List<GameObject>();
+    public List<GameObject> spawnedStars = new List<GameObject>();
 
-
+    [ColorUsage(true, true)]
     public List<Color> starColors;
 
     void Start()
@@ -40,6 +40,7 @@ public class StarSpawn : MonoBehaviour
         {
             float randomX = Random.Range(bounds.min.x, bounds.max.x);
             float randomY = Random.Range(bounds.min.y, bounds.max.y);
+            //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
             randomPosition = new Vector3(randomX, randomY, starObject.transform.position.z);
 
@@ -76,8 +77,14 @@ public class StarSpawn : MonoBehaviour
         }
     }
 
-    void Update()
+    public void RemoveStar(GameObject star)
     {
-        
+        spawnedStars.Remove(star);
+    }
+
+    public void MoveStar(GameObject star)
+    {
+        Vector3 pos = star.transform.position;
+        star.transform.position = -pos;
     }
 }
