@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8447060104705232174
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpaceSkybox
+  m_Shader: {fileID: -6465566751694194690, guid: 74f5926bda1562049890d1ce9b3bf2d1, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _SampleTexture2D_871da55049d640039ad36d3b906ac95c_Texture_1_Texture2D:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_db51929b58634def93b03398f6cd90ec_Texture_1_Texture2D:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _CloudSmooth: 0.55
+    - _FogRotationSpeed: 0.1
+    - _FogScale: 4
+    - _LerpThreshold: 0.6
+    - _NoiseScale: 13.7
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _RotationSpeed: 0.1
+    - _SkyRotationSpeed: 0.001
+    - _SkySmooth: -0.12
+    - _SkyXRotationSpeed: 0.1
+    - _SkyYRotationSpeed: -0.5
+    - _SmoothstepEdge: -0.06
+    - _StarRotationSpeed: 0.01
+    - _StarScale: 1500
+    - _StarStep: 0.8
+    - _Threshold: 0.49
+    m_Colors:
+    - _BottomColor: {r: 0.8259624, g: 0.45283008, b: 0.9056604, a: 1}
+    - _FogBottomColor: {r: 1, g: 0, b: 0.5803919, a: 0}
+    - _FogColor: {r: 0, g: 1, b: 0.43936706, a: 0}
+    - _FogTopColor: {r: 0.14989515, g: 0.3333333, b: 0.22750358, a: 0}
+    - _FogTopInnerColor: {r: 0.3584906, g: 0.14091608, b: 0.33238167, a: 0}
+    - _MiddleColor: {r: 0.12959819, g: 0, b: 0.4339623, a: 0}
+    - _OtherColor: {r: 1, g: 0.7475134, b: 0.49371058, a: 0}
+    - _TopColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
