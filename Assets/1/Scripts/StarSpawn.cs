@@ -6,13 +6,16 @@ public class StarSpawn : MonoBehaviour
 {
     public GameObject starObject;
     public GameObject spawnArea;
+    public GameObject catchedSpawnArea;
     public float scaleMin = 0.3f;
     public float scaleMax = 0.6f;
     public float spawnInterval = 4f;
     public float minDistanceBetweenStars = 0.6f;
     public int maxStars = 50;
+    public float moveBackSpeed = 0.1f;
 
     public List<GameObject> spawnedStars = new List<GameObject>();
+    public List<GameObject> catchedStars = new List<GameObject>();
 
     [ColorUsage(true, true)]
     public List<Color> starColors;
@@ -85,6 +88,25 @@ public class StarSpawn : MonoBehaviour
     public void MoveStar(GameObject star)
     {
         Vector3 pos = star.transform.position;
-        star.transform.position = -pos;
+        star.transform.position = new Vector3(pos.x, -pos.y, pos.z);
+
+        catchedStars.Add(star);
+    }
+
+    public void Update()
+    {
+        for (int i = 0; i < catchedStars.Count; i++)
+        {
+            if (catchedStars[i] != null)
+            {
+                Vector3 floatOffset = new Vector3(
+                    Mathf.Sin(Time.time + i) * 0.5f,
+                    Mathf.Cos(Time.time + i) * 0.5f,
+                    moveBackSpeed
+                );
+
+                catchedStars[i].transform.position += floatOffset * Time.deltaTime;
+            }
+        }
     }
 }
