@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class StarSpawn : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class StarSpawn : MonoBehaviour
     public float minDistanceBetweenStars = 0.6f;
     public int maxStars = 50;
     public float moveBackSpeed = 0.1f;
+    public float shrinkSpeed = 0.1f;
+    public float minScale = 0.05f;
 
     public List<GameObject> spawnedStars = new List<GameObject>();
     public List<GameObject> catchedStars = new List<GameObject>();
@@ -100,12 +103,36 @@ public class StarSpawn : MonoBehaviour
             if (catchedStars[i] != null)
             {
                 Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * 0.5f,
-                    Mathf.Cos(Time.time + i) * 0.5f,
-                    moveBackSpeed
+                    Mathf.Sin(Time.time + i) * 0.2f,
+                    Mathf.Cos(Time.time + i) * 0.2f,
+                    0
                 );
 
                 catchedStars[i].transform.position += floatOffset * Time.deltaTime;
+
+                Vector3 scale = catchedStars[i].transform.localScale;
+                scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
+
+                if (scale.x < minScale)
+                {
+                    scale = Vector3.one * minScale;
+                }
+
+                catchedStars[i].transform.localScale = scale;
+            }
+        }
+
+        for (int i = 0; i < spawnedStars.Count; i++)
+        {
+            if (spawnedStars[i] != null)
+            {
+                Vector3 floatOffset = new Vector3(
+                    Mathf.Sin(Time.time + i) * 0.2f,
+                    Mathf.Cos(Time.time + i) * 0.2f,
+                    0
+                );
+
+                spawnedStars[i].transform.position += floatOffset * Time.deltaTime;
             }
         }
     }

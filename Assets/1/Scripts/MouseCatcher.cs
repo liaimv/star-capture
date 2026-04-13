@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class MouseCatcher : MonoBehaviour
 {
+    public Camera raycastCamera;
     public float rayDistance = 100f;
 
     private StarSpawn starSpawn;
@@ -16,7 +17,7 @@ public class MouseCatcher : MonoBehaviour
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        Ray ray = raycastCamera.ScreenPointToRay(mousePosition);
         RaycastHit hit;
 
         Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
