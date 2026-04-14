@@ -7,7 +7,7 @@ public class StarSpawn : MonoBehaviour
 {
     public GameObject starObject;
     public GameObject spawnArea;
-    public GameObject catchedSpawnArea;
+    public GameObject catchedStarArea;
     public float scaleMin = 0.3f;
     public float scaleMax = 0.6f;
     public float spawnInterval = 4f;
@@ -90,8 +90,15 @@ public class StarSpawn : MonoBehaviour
 
     public void MoveStar(GameObject star)
     {
-        Vector3 pos = star.transform.position;
-        star.transform.position = new Vector3(pos.x, -pos.y, pos.z);
+        Bounds bounds = catchedStarArea.GetComponent<Renderer>().bounds;
+
+        float randomX = Random.Range(bounds.min.x, bounds.max.x);
+        float randomY = Random.Range(bounds.min.y, bounds.max.y);
+        //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
+
+        Vector3 randomPosition = new Vector3(randomX, randomY, 0);
+
+        star.transform.position = randomPosition;
 
         catchedStars.Add(star);
     }
