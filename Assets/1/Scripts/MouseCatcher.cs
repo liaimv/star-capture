@@ -29,8 +29,7 @@ public class MouseCatcher : MonoBehaviour
 
             if (starSpawn.spawnedStars.Contains(hitObject))
             {
-                starSpawn.RemoveStar(hitObject);
-                starSpawn.MoveStar(hitObject);
+                starSpawn.MoveSequence(hitObject);
             }
         }
     }
