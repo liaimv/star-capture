@@ -160,6 +160,7 @@ public class StarSpawn : MonoBehaviour
     {
         yield return new WaitForSeconds(delayCapture);
 
+        star.transform.GetChild(0).gameObject.SetActive(false);
         star.transform.position = newPos;
         capturedStars.Add(star);
     }
