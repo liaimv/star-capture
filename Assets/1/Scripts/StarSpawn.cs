@@ -28,6 +28,7 @@ public class StarSpawn : MonoBehaviour
     public float moveBackSpeed = 0.1f;
     public float shrinkSpeed = 0.1f;
     public float minScale = 0.05f;
+    public float shakeIntensity = 0.4f;
 
     [Header("Star Visual Variables")]
     [ColorUsage(true, true)]
@@ -35,7 +36,8 @@ public class StarSpawn : MonoBehaviour
     public float delayCapture = 0.5f;
     private VisualEffect captureImpact;
     private Color captureImpactColor;
-    public float spawnVFXdelay = 0.5f;
+    public float spawnVFXDelay = 0.5f;
+    public float spawnStarDelay = 0.5f;
 
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
@@ -86,27 +88,28 @@ public class StarSpawn : MonoBehaviour
 
             if (validPosition)
             {
-                GameObject newSphere = Instantiate(starObject, randomPosition, Quaternion.identity);
-
-                VisualEffect spawnVFX = newSphere.GetComponentInChildren<VisualEffect>();
-                MeshRenderer starRenderer = newSphere.GetComponent<MeshRenderer>();
-
-                //Random scale
-                float randomScale = Random.Range(scaleMin, scaleMax);
-                newSphere.transform.localScale = Vector3.one * randomScale;
+                GameObject newStar = Instantiate(starObject, randomPosition, Quaternion.identity);
 
                 //Random color
                 Color randomColor = starColors[Random.Range(0, starColors.Count)];
-                Renderer renderer = newSphere.GetComponent<Renderer>();
+                Renderer renderer = newStar.GetComponent<Renderer>();
                 renderer.material.SetColor("_EmissionColor", randomColor);
 
-                newSphere.SetActive(true);
+                VisualEffect spawnVFX = newStar.transform.GetChild(1).GetComponent<VisualEffect>();
+                MeshRenderer starRenderer = newStar.GetComponent<MeshRenderer>();
 
-                spawnedStars.Add(newSphere);
+                Color starCol = starRenderer.material.GetColor("_EmissionColor");
+                spawnVFX.SetVector4("SpawnColor", starCol);
+
+                //Random scale
+                float randomScale = Random.Range(scaleMin, scaleMax);
+                newStar.transform.localScale = Vector3.one * randomScale;
+
+                newStar.SetActive(true);
 
                 if (spawnVFX != null && starRenderer != null)
                 {
-                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer));
+                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, newStar));
                 }
             }
 
@@ -114,19 +117,20 @@ public class StarSpawn : MonoBehaviour
         }
     }
 
-    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer)
+    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject newStar)
     {
-        yield return new WaitForSeconds(spawnVFXdelay);
+        yield return new WaitForSeconds(spawnVFXDelay);
         if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 0f);
 
-        StartCoroutine(ShowStarAfterDelay(starRenderer));
+        StartCoroutine(ShowStarAfterDelay(starRenderer, newStar));
     }
 
-    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer)
+    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject newStar)
     {
-        yield return new WaitForSeconds(spawnVFXdelay + 0.4f);
+        yield return new WaitForSeconds(spawnStarDelay);
 
         if (starRenderer != null) starRenderer.enabled = true;
+        spawnedStars.Add(newStar);
     }
 
     public void MoveSequence(GameObject star)
@@ -134,11 +138,10 @@ public class StarSpawn : MonoBehaviour
         spawnedStars.Remove(star);
 
         //Captured VFX
-        Transform firstChild = star.transform.GetChild(0);
-        captureImpact = firstChild.GetComponent<VisualEffect>();
+        captureImpact = star.transform.GetChild(0).GetComponent<VisualEffect>();
         if (captureImpact != null)
         {
-            Color starCol = star.GetComponent<MeshRenderer>().material.color;
+            Color starCol = star.GetComponent<MeshRenderer>().material.GetColor("_EmissionColor");
             captureImpact.SetVector4("ImpactColor", starCol);
             captureImpact.Play();
         }
@@ -168,8 +171,8 @@ public class StarSpawn : MonoBehaviour
             if (capturedStars[i] != null)
             {
                 Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * 0.2f,
-                    Mathf.Cos(Time.time + i) * 0.2f,
+                    Mathf.Sin(Time.time + i) * shakeIntensity,
+                    Mathf.Cos(Time.time + i) * shakeIntensity,
                     0
                 );
 
@@ -192,8 +195,8 @@ public class StarSpawn : MonoBehaviour
             if (spawnedStars[i] != null)
             {
                 Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * 0.2f,
-                    Mathf.Cos(Time.time + i) * 0.2f,
+                    Mathf.Sin(Time.time + i) * shakeIntensity,
+                    Mathf.Cos(Time.time + i) * shakeIntensity,
                     moveBackSpeed
                 );
 
