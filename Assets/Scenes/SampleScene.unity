@@ -274,7 +274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -282,7 +282,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -807,7 +807,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600958826}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6401,12 +6401,13 @@ MonoBehaviour:
   capturedStarArea: {fileID: 1305470643}
   scaleMin: 0.4
   scaleMax: 0.8
-  spawnInterval: 0.5
+  spawnInterval: 2
   minDistanceBetweenStars: 5
   maxStars: 15
   moveBackSpeed: 0
   shrinkSpeed: 0.001
   minScale: 0.1
+  shakeIntensity: 0.4
   starColors:
   - {r: 11.984315, g: 0, b: 0, a: 0}
   - {r: 11.984315, g: 11.225195, b: 0, a: 0}
@@ -6415,8 +6416,9 @@ MonoBehaviour:
   - {r: 0, g: 6.7764697, b: 64, a: 0}
   - {r: 11.984315, g: 0, b: 9.9241905, a: 0}
   - {r: 11.984315, g: 11.984315, b: 11.984315, a: 0}
-  delayCapture: 0.1
-  spawnVFXdelay: 0.5
+  delayCapture: 0.3
+  spawnVFXDelay: 0.4
+  spawnStarDelay: 0.5
   spawnedStars: []
   capturedStars: []
 --- !u!4 &1525726273
@@ -6824,7 +6826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2137614588
 Transform:
   m_ObjectHideFlags: 0
@@ -6848,7 +6850,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137614587}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
