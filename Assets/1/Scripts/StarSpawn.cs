@@ -1,14 +1,12 @@
-using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine.VFX;
 using System.Collections;
 
 public class StarSpawn : MonoBehaviour
 {
     [Header("Star Variables")]
-    public GameObject starObject;
+    public GameObject starParentObject;
     public GameObject spawnArea;
 
     [Header("Captured Star Variables")]
@@ -23,6 +21,7 @@ public class StarSpawn : MonoBehaviour
     public float spawnInterval = 4f;
     public float minDistanceBetweenStars = 0.6f;
     public int maxStars = 50;
+    public float constantZPos = 5.2f;
 
     [Header("Star Transform Variables")]
     public float moveBackSpeed = 0.1f;
@@ -39,6 +38,11 @@ public class StarSpawn : MonoBehaviour
     public float spawnVFXDelay = 0.5f;
     public float spawnStarDelay = 0.5f;
 
+    [Header("Star Rotation Variables")]
+    public float starRotationSpeedMin;
+    public float starRotationSpeedMax;
+    private Dictionary<GameObject, float> starRotationSpeeds = new Dictionary<GameObject, float>();
+
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
     [HideInInspector]
@@ -47,7 +51,7 @@ public class StarSpawn : MonoBehaviour
     void Start()
     {
         //Start star spawn
-        starObject.SetActive(false);
+        starParentObject.SetActive(false);
         InvokeRepeating("SpawnSphere", 0f, spawnInterval);
 
         //Find bounds for captured area
@@ -73,13 +77,13 @@ public class StarSpawn : MonoBehaviour
             float randomY = Random.Range(bounds.min.y, bounds.max.y);
             //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
-            randomPosition = new Vector3(randomX, randomY, starObject.transform.position.z);
+            randomPosition = new Vector3(randomX, randomY, constantZPos);
 
             validPosition = true;
 
-            foreach (GameObject star in spawnedStars)
+            foreach (GameObject starParent in spawnedStars)
             {
-                if (Vector3.Distance(randomPosition, star.transform.position) < minDistanceBetweenStars)
+                if (Vector3.Distance(randomPosition, starParent.transform.position) < minDistanceBetweenStars)
                 {
                     validPosition = false;
                     break;
@@ -88,7 +92,13 @@ public class StarSpawn : MonoBehaviour
 
             if (validPosition)
             {
-                GameObject newStar = Instantiate(starObject, randomPosition, Quaternion.identity);
+                GameObject newStarParent = Instantiate(starParentObject, randomPosition, Quaternion.identity); //Use parent for transform (position, scale, and collider)
+                GameObject newStar = newStarParent.transform.GetChild(0).gameObject;
+
+                //Create random rotation speed for each star and save it in a dictionary
+                float starRotationSpeed = Random.Range(starRotationSpeedMin, starRotationSpeedMax);
+                if (Random.value > 0.5f) starRotationSpeed *= -1f;
+                starRotationSpeeds.Add(newStarParent, starRotationSpeed);
 
                 //Random color
                 Color randomColor = starColors[Random.Range(0, starColors.Count)];
@@ -103,9 +113,9 @@ public class StarSpawn : MonoBehaviour
 
                 //Random scale
                 float randomScale = Random.Range(scaleMin, scaleMax);
-                newStar.transform.localScale = Vector3.one * randomScale;
+                newStarParent.transform.localScale = Vector3.one * randomScale;
 
-                newStar.SetActive(true);
+                newStarParent.SetActive(true);
 
                 if (spawnVFX != null && starRenderer != null)
                 {
@@ -130,12 +140,16 @@ public class StarSpawn : MonoBehaviour
         yield return new WaitForSeconds(spawnStarDelay);
 
         if (starRenderer != null) starRenderer.enabled = true;
-        spawnedStars.Add(newStar);
+        GameObject newStarParent = newStar.transform.parent.gameObject;
+
+        spawnedStars.Add(newStarParent);
     }
 
-    public void MoveSequence(GameObject star)
+    public void MoveSequence(GameObject starParent)
     {
-        spawnedStars.Remove(star);
+        GameObject star = starParent.transform.GetChild(0).gameObject;
+
+        spawnedStars.Remove(starParent);
 
         //Captured VFX
         captureImpact = star.transform.GetChild(0).GetComponent<VisualEffect>();
@@ -151,26 +165,31 @@ public class StarSpawn : MonoBehaviour
         float randomY = Random.Range(capturedAreaBounds.min.y, capturedAreaBounds.max.y);
         //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
-        Vector3 randomPos = new Vector3(randomX, randomY, 0);
+        Vector3 randomPos = new Vector3(randomX, randomY, constantZPos);
 
-        StartCoroutine(MoveStar(star, randomPos));
+        StartCoroutine(MoveStar(starParent, randomPos));
     }
 
-    private IEnumerator MoveStar(GameObject star, Vector3 newPos)
+    private IEnumerator MoveStar(GameObject starParent, Vector3 newPos)
     {
         yield return new WaitForSeconds(delayCapture);
 
-        star.transform.GetChild(0).gameObject.SetActive(false);
-        star.transform.position = newPos;
-        capturedStars.Add(star);
+        GameObject star = starParent.transform.GetChild(0).gameObject; 
+
+        star.transform.GetChild(0).gameObject.SetActive(false); //Stop CapturedImpact VFX
+
+        starParent.transform.position = newPos;
+        capturedStars.Add(starParent);
     }
 
     public void Update()
     {
+        //Stars moving around
         for (int i = 0; i < capturedStars.Count; i++)
         {
             if (capturedStars[i] != null)
             {
+                //Moving Around
                 Vector3 floatOffset = new Vector3(
                     Mathf.Sin(Time.time + i) * shakeIntensity,
                     Mathf.Cos(Time.time + i) * shakeIntensity,
@@ -179,6 +198,7 @@ public class StarSpawn : MonoBehaviour
 
                 capturedStars[i].transform.position += floatOffset * Time.deltaTime;
 
+                //Shrinking
                 Vector3 scale = capturedStars[i].transform.localScale;
                 scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
 
@@ -188,6 +208,15 @@ public class StarSpawn : MonoBehaviour
                 }
 
                 capturedStars[i].transform.localScale = scale;
+
+                //Rotation (make sure no error happens when something gets removed)
+                GameObject star = capturedStars[i];
+
+                if (starRotationSpeeds.ContainsKey(star))
+                {
+                    float starRotationSpeed = starRotationSpeeds[star];
+                    star.transform.Rotate(Vector3.forward * starRotationSpeed * Time.deltaTime);
+                }
             }
         }
 
@@ -195,6 +224,7 @@ public class StarSpawn : MonoBehaviour
         {
             if (spawnedStars[i] != null)
             {
+                //Moving Around
                 Vector3 floatOffset = new Vector3(
                     Mathf.Sin(Time.time + i) * shakeIntensity,
                     Mathf.Cos(Time.time + i) * shakeIntensity,
@@ -202,6 +232,15 @@ public class StarSpawn : MonoBehaviour
                 );
 
                 spawnedStars[i].transform.position += floatOffset * Time.deltaTime;
+
+                //Rotation (make sure no error happens when something gets removed)
+                GameObject star = spawnedStars[i];
+
+                if (starRotationSpeeds.ContainsKey(star))
+                {
+                    float starRotationSpeed = starRotationSpeeds[star];
+                    star.transform.Rotate(Vector3.forward * starRotationSpeed * Time.deltaTime);
+                }
             }
         }
     }
