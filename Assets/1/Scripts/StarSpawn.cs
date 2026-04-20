@@ -3,11 +3,39 @@ using System.Collections.Generic;
 using UnityEngine.VFX;
 using System.Collections;
 
+[System.Serializable]
+public struct ShootingStarColorPair
+{
+    public Color mainColor;
+    public Color secondaryColor;
+}
+
 public class StarSpawn : MonoBehaviour
 {
     [Header("Star Variables")]
     public GameObject starParentObject;
     public GameObject spawnArea;
+
+    [Header("Shooting Star Variable")]
+    public GameObject shootingStarParentObject;
+    public float shootingStarEventDelayMin = 3f;
+    public float shootingStarEventDelayMax = 13f;
+
+    [Header("Shooting Star Scale Variable")]
+    public float shootingScaleMin = 1.5f;
+    public float shootingScaleMax = 2.5f;
+
+    [Header("Shooting Star Transform Variables")]
+    public float forceAmountMin = 10f;
+    public float forceAmountMax = 20f;
+    public float shootingStarStartPosXMin = 35f;
+    public float shootingStarStartPosXMax = 60f;
+    public float shootingStarStartPosYMin = -3.5f;
+    public float shootingStarStartPosYMax = 0f;
+    public float shootingStarConstantZPos = -1.9f;
+
+    [Header("Shooting Star Visual Variables")]
+    public List<ShootingStarColorPair> shootingStarColors;
 
     [Header("Captured Star Variables")]
     public GameObject capturedStarArea;
@@ -21,7 +49,7 @@ public class StarSpawn : MonoBehaviour
     public float spawnInterval = 4f;
     public float minDistanceBetweenStars = 0.6f;
     public int maxStars = 50;
-    public float constantZPos = 5.2f;
+    public float starConstantZPos = 5.2f;
 
     [Header("Star Transform Variables")]
     public float moveBackSpeed = 0.1f;
@@ -34,19 +62,16 @@ public class StarSpawn : MonoBehaviour
     public List<Color> starColors;
     public float delayCapture = 0.5f;
     private VisualEffect captureImpact;
-    private Color captureImpactColor;
     public float spawnVFXDelay = 0.5f;
     public float spawnStarDelay = 0.5f;
-
-    [Header("Star Rotation Variables")]
-    public float starRotationSpeedMin;
-    public float starRotationSpeedMax;
-    private Dictionary<GameObject, float> starRotationSpeeds = new Dictionary<GameObject, float>();
 
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
     [HideInInspector]
+    public List<GameObject> shootingStars = new List<GameObject>();
+    [HideInInspector]
     public List<GameObject> capturedStars = new List<GameObject>();
+
 
     void Start()
     {
@@ -54,8 +79,57 @@ public class StarSpawn : MonoBehaviour
         starParentObject.SetActive(false);
         InvokeRepeating("SpawnSphere", 0f, spawnInterval);
 
+        //Shooting star
+        shootingStarParentObject.SetActive(false);
+        StartCoroutine(RandomShootingStarEventRoutine());
+
         //Find bounds for captured area
         capturedAreaBounds = capturedStarArea.GetComponent<Renderer>().bounds;
+    }
+
+    public void Update()
+    {
+        //Stars moving around
+        for (int i = 0; i < capturedStars.Count; i++)
+        {
+            if (capturedStars[i] != null)
+            {
+                //Moving Around
+                Vector3 floatOffset = new Vector3(
+                    Mathf.Sin(Time.time + i) * shakeIntensity,
+                    Mathf.Cos(Time.time + i) * shakeIntensity,
+                    0
+                );
+
+                capturedStars[i].transform.position += floatOffset * Time.deltaTime;
+
+                //Shrinking
+                Vector3 scale = capturedStars[i].transform.localScale;
+                scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
+
+                if (scale.x < minScale)
+                {
+                    scale = Vector3.one * minScale;
+                }
+
+                capturedStars[i].transform.localScale = scale;
+            }
+        }
+
+        for (int i = 0; i < spawnedStars.Count; i++)
+        {
+            if (spawnedStars[i] != null)
+            {
+                //Moving Around
+                Vector3 floatOffset = new Vector3(
+                    Mathf.Sin(Time.time + i) * shakeIntensity,
+                    Mathf.Cos(Time.time + i) * shakeIntensity,
+                    moveBackSpeed
+                );
+
+                spawnedStars[i].transform.position += floatOffset * Time.deltaTime;
+            }
+        }
     }
 
     void SpawnSphere()
@@ -77,7 +151,7 @@ public class StarSpawn : MonoBehaviour
             float randomY = Random.Range(bounds.min.y, bounds.max.y);
             //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
-            randomPosition = new Vector3(randomX, randomY, constantZPos);
+            randomPosition = new Vector3(randomX, randomY, starConstantZPos);
 
             validPosition = true;
 
@@ -94,11 +168,6 @@ public class StarSpawn : MonoBehaviour
             {
                 GameObject newStarParent = Instantiate(starParentObject, randomPosition, Quaternion.identity); //Use parent for transform (position, scale, and collider)
                 GameObject newStar = newStarParent.transform.GetChild(0).gameObject;
-
-                //Create random rotation speed for each star and save it in a dictionary
-                float starRotationSpeed = Random.Range(starRotationSpeedMin, starRotationSpeedMax);
-                if (Random.value > 0.5f) starRotationSpeed *= -1f;
-                starRotationSpeeds.Add(newStarParent, starRotationSpeed);
 
                 //Random color
                 Color randomColor = starColors[Random.Range(0, starColors.Count)];
@@ -145,18 +214,89 @@ public class StarSpawn : MonoBehaviour
         spawnedStars.Add(newStarParent);
     }
 
+    IEnumerator RandomShootingStarEventRoutine()
+    {
+        while (true)
+        {
+            float delay = Random.Range(shootingStarEventDelayMin, shootingStarEventDelayMax);
+            yield return new WaitForSeconds(delay);
+
+            SpawnShootingStar();
+        }
+    }
+
+    void SpawnShootingStar()
+    {
+        GameObject shootingStarParent = Instantiate(shootingStarParentObject);
+
+        shootingStars.Add(shootingStarParent);
+
+        GameObject shootingStar = shootingStarParent.transform.GetChild(0).gameObject;
+
+        shootingStarParent.SetActive(true);
+
+        //Shooting star color initialization
+        ShootingStarColorPair colorPair = shootingStarColors[Random.Range(0, shootingStarColors.Count)];
+
+        Renderer shootingStarRenderer = shootingStar.GetComponent<Renderer>();
+
+        shootingStarRenderer.material.SetColor("_MainColor", colorPair.mainColor);
+        shootingStarRenderer.material.SetColor("_SecondaryColor", colorPair.secondaryColor);
+
+        //Shooting star sparkles VFX color
+        VisualEffect sparklesVFX = shootingStar.transform.GetChild(1).GetComponent<VisualEffect>(); 
+        sparklesVFX.SetVector4("MainColor", colorPair.mainColor);
+        sparklesVFX.SetVector4("SecondaryColor", colorPair.secondaryColor);
+
+        //Random Scale
+        float randomScale = Random.Range(shootingScaleMin, shootingScaleMax);
+        shootingStarParent.transform.localScale = Vector3.one * randomScale;
+
+        //Initialize start position
+        float shootingStarStartPosX = Random.Range(shootingStarStartPosXMin, shootingStarStartPosXMax);
+        float shootingStarStartPosY = Random.Range(shootingStarStartPosYMin, shootingStarStartPosYMax);
+
+        Vector3 newPos = new Vector3(shootingStarStartPosX, shootingStarStartPosY, shootingStarConstantZPos);
+        shootingStarParent.transform.position = newPos;
+
+        //Shoot motion
+        float forceAmount = Random.Range(forceAmountMin, forceAmountMax);
+        Rigidbody shootingStarRB = shootingStarParent.GetComponent<Rigidbody>();
+        shootingStarRB.AddForce(Vector3.left * forceAmount, ForceMode.Impulse);
+    }
+
     public void MoveSequence(GameObject starParent)
     {
         GameObject star = starParent.transform.GetChild(0).gameObject;
 
-        spawnedStars.Remove(starParent);
+        Color starCol = Color.white;
+        float constantZPos = -2.5f;
+        float captureVFXIntensity = 1f;
+
+        //Remove star from its list
+        if (spawnedStars.Contains(starParent))
+        {
+            constantZPos = starConstantZPos;
+            starCol = star.GetComponent<MeshRenderer>().material.GetColor("_EmissionColor");
+            spawnedStars.Remove(starParent);
+        }
+
+        if (shootingStars.Contains(starParent))
+        {
+            captureVFXIntensity = 200f;
+            constantZPos = shootingStarConstantZPos;
+            Rigidbody shootingStarRB = starParent.GetComponent<Rigidbody>();
+            shootingStarRB.useGravity = false;
+            shootingStarRB.linearVelocity = Vector3.zero;
+            starCol = star.GetComponent<MeshRenderer>().material.GetColor("_SecondaryColor");
+            shootingStars.Remove(starParent);
+        }
 
         //Captured VFX
         captureImpact = star.transform.GetChild(0).GetComponent<VisualEffect>();
         if (captureImpact != null)
         {
-            Color starCol = star.GetComponent<MeshRenderer>().material.GetColor("_EmissionColor");
-            captureImpact.SetVector4("ImpactColor", starCol);
+            captureImpact.SetVector4("ImpactColor", starCol * captureVFXIntensity);
             captureImpact.Play();
         }
 
@@ -174,74 +314,11 @@ public class StarSpawn : MonoBehaviour
     {
         yield return new WaitForSeconds(delayCapture);
 
-        GameObject star = starParent.transform.GetChild(0).gameObject; 
+        GameObject star = starParent.transform.GetChild(0).gameObject;
 
         star.transform.GetChild(0).gameObject.SetActive(false); //Stop CapturedImpact VFX
 
         starParent.transform.position = newPos;
         capturedStars.Add(starParent);
-    }
-
-    public void Update()
-    {
-        //Stars moving around
-        for (int i = 0; i < capturedStars.Count; i++)
-        {
-            if (capturedStars[i] != null)
-            {
-                //Moving Around
-                Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * shakeIntensity,
-                    Mathf.Cos(Time.time + i) * shakeIntensity,
-                    0
-                );
-
-                capturedStars[i].transform.position += floatOffset * Time.deltaTime;
-
-                //Shrinking
-                Vector3 scale = capturedStars[i].transform.localScale;
-                scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
-
-                if (scale.x < minScale)
-                {
-                    scale = Vector3.one * minScale;
-                }
-
-                capturedStars[i].transform.localScale = scale;
-
-                //Rotation (make sure no error happens when something gets removed)
-                GameObject star = capturedStars[i];
-
-                if (starRotationSpeeds.ContainsKey(star))
-                {
-                    float starRotationSpeed = starRotationSpeeds[star];
-                    star.transform.Rotate(Vector3.forward * starRotationSpeed * Time.deltaTime);
-                }
-            }
-        }
-
-        for (int i = 0; i < spawnedStars.Count; i++)
-        {
-            if (spawnedStars[i] != null)
-            {
-                //Moving Around
-                Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * shakeIntensity,
-                    Mathf.Cos(Time.time + i) * shakeIntensity,
-                    moveBackSpeed
-                );
-
-                spawnedStars[i].transform.position += floatOffset * Time.deltaTime;
-
-                //Rotation (make sure no error happens when something gets removed)
-                GameObject star = spawnedStars[i];
-
-                if (starRotationSpeeds.ContainsKey(star))
-                {
-                    float starRotationSpeed = starRotationSpeeds[star];
-                    star.transform.Rotate(Vector3.forward * starRotationSpeed * Time.deltaTime);
-                }
-            }
-        }
     }
 }

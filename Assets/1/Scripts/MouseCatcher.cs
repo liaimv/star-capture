@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class MouseCatcher : MonoBehaviour
 {
     public Camera interactionCamera;
-    public float rayDistance = 100f;
+    public float rayDistanceStar = 40f;
+    public float rayDistanceShootingStar = 35f;
 
     private StarSpawn starSpawn;
 
@@ -18,12 +19,26 @@ public class MouseCatcher : MonoBehaviour
         Vector2 mouse = Mouse.current.position.ReadValue();
 
         Ray ray = interactionCamera.ScreenPointToRay(mouse);
-
         RaycastHit hit;
 
-        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
+        //Shooting Stars Ray
+        Debug.DrawRay(ray.origin, ray.direction * rayDistanceShootingStar, Color.blue);
 
-        if (Physics.Raycast(ray, out hit, rayDistance))
+        if (Physics.Raycast(ray, out hit, rayDistanceShootingStar))
+        {
+            GameObject hitObject = hit.collider.transform.root.gameObject;
+
+            if (starSpawn.shootingStars.Contains(hitObject))
+            {
+                starSpawn.MoveSequence(hitObject);
+                return;
+            }
+        }
+
+        //Normal Stars Ray
+        Debug.DrawRay(ray.origin, ray.direction * rayDistanceStar, Color.red);
+
+        if (Physics.Raycast(ray, out hit, rayDistanceStar))
         {
             GameObject hitObject = hit.collider.transform.root.gameObject;
 
