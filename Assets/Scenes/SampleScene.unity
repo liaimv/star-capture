@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 78092351}
   m_Layer: 0
   m_Name: ShootingStarParent
-  m_TagString: Untagged
+  m_TagString: Shooting Star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 281122944}
   m_Layer: 0
   m_Name: StarParent
-  m_TagString: Untagged
+  m_TagString: Star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1880,7 +1880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1247576392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2155,7 +2155,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 70.41, z: -1.9}
-  m_LocalScale: {x: 49.611492, y: 25.264147, z: 0.5655496}
+  m_LocalScale: {x: 46.91, y: 23.9, z: 0.5655496}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2266,8 +2266,8 @@ MonoBehaviour:
   starParentObject: {fileID: 281122941}
   spawnArea: {fileID: 2037248903}
   shootingStarParentObject: {fileID: 78092347}
-  shootingStarEventDelayMin: 3
-  shootingStarEventDelayMax: 13
+  shootingStarEventDelayMin: 1
+  shootingStarEventDelayMax: 2
   shootingScaleMin: 1.5
   shootingScaleMax: 2.5
   forceAmountMin: 7
@@ -2277,6 +2277,7 @@ MonoBehaviour:
   shootingStarStartPosYMin: -3.5
   shootingStarStartPosYMax: 0
   shootingStarConstantZPos: -2.9
+  shootingStarShakeIntensity: 1
   shootingStarColors:
   - mainColor: {r: 1, g: 0, b: 0, a: 0}
     secondaryColor: {r: 1, g: 0.92073464, b: 0, a: 0}
@@ -2291,14 +2292,13 @@ MonoBehaviour:
   capturedStarArea: {fileID: 1305470643}
   scaleMin: 0.5
   scaleMax: 1.5
-  spawnInterval: 2
+  spawnInterval: 0.5
   minDistanceBetweenStars: 5
-  maxStars: 15
+  maxStars: 30
   starConstantZPos: -1.9
-  moveBackSpeed: 0
-  shrinkSpeed: 0.001
-  minScale: 0.1
-  shakeIntensity: 0.4
+  shrinkSpeed: 0.1
+  minScale: 0.05
+  starShakeIntensity: 0.4
   starColors:
   - {r: 11.984315, g: 0, b: 0, a: 0}
   - {r: 11.984315, g: 11.225195, b: 0, a: 0}
@@ -2697,7 +2697,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -24.1, z: -1.9}
-  m_LocalScale: {x: 49.611492, y: 25.264143, z: 0.5655496}
+  m_LocalScale: {x: 46.91, y: 23.9, z: 0.5655496}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
