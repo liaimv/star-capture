@@ -33,6 +33,7 @@ public class StarSpawn : MonoBehaviour
     public float shootingStarStartPosYMin = -3.5f;
     public float shootingStarStartPosYMax = 0f;
     public float shootingStarConstantZPos = -1.9f;
+    public float shootingStarShakeIntensity = 1f;
 
     [Header("Shooting Star Visual Variables")]
     public List<ShootingStarColorPair> shootingStarColors;
@@ -52,10 +53,10 @@ public class StarSpawn : MonoBehaviour
     public float starConstantZPos = 5.2f;
 
     [Header("Star Transform Variables")]
-    public float moveBackSpeed = 0.1f;
     public float shrinkSpeed = 0.1f;
     public float minScale = 0.05f;
-    public float shakeIntensity = 0.4f;
+    public float starShakeIntensity = 0.4f;
+    private float shakeIntensity;
 
     [Header("Star Visual Variables")]
     [ColorUsage(true, true)]
@@ -92,6 +93,15 @@ public class StarSpawn : MonoBehaviour
         //Stars moving around
         for (int i = 0; i < capturedStars.Count; i++)
         {
+            if (capturedStars[i].CompareTag("Star"))
+            {
+                shakeIntensity = starShakeIntensity;
+            }
+            else if (capturedStars[i].CompareTag("Shooting Star"))
+            {
+                shakeIntensity = shootingStarShakeIntensity;
+            }
+
             if (capturedStars[i] != null)
             {
                 //Moving Around
@@ -103,16 +113,19 @@ public class StarSpawn : MonoBehaviour
 
                 capturedStars[i].transform.position += floatOffset * Time.deltaTime;
 
-                //Shrinking
-                Vector3 scale = capturedStars[i].transform.localScale;
-                scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
-
-                if (scale.x < minScale)
+                if (capturedStars[i].CompareTag("Star")) //Shrink only normal stars
                 {
-                    scale = Vector3.one * minScale;
-                }
+                    //Shrinking
+                    Vector3 scale = capturedStars[i].transform.localScale;
+                    scale -= Vector3.one * shrinkSpeed * Time.deltaTime;
 
-                capturedStars[i].transform.localScale = scale;
+                    if (scale.x < minScale)
+                    {
+                        scale = Vector3.one * minScale;
+                    }
+
+                    capturedStars[i].transform.localScale = scale;
+                }
             }
         }
 
@@ -122,9 +135,9 @@ public class StarSpawn : MonoBehaviour
             {
                 //Moving Around
                 Vector3 floatOffset = new Vector3(
-                    Mathf.Sin(Time.time + i) * shakeIntensity,
-                    Mathf.Cos(Time.time + i) * shakeIntensity,
-                    moveBackSpeed
+                    Mathf.Sin(Time.time + i) * starShakeIntensity,
+                    Mathf.Cos(Time.time + i) * starShakeIntensity,
+                    0
                 );
 
                 spawnedStars[i].transform.position += floatOffset * Time.deltaTime;
@@ -169,6 +182,8 @@ public class StarSpawn : MonoBehaviour
                 GameObject newStarParent = Instantiate(starParentObject, randomPosition, Quaternion.identity); //Use parent for transform (position, scale, and collider)
                 GameObject newStar = newStarParent.transform.GetChild(0).gameObject;
 
+                spawnedStars.Add(newStarParent);
+
                 //Random color
                 Color randomColor = starColors[Random.Range(0, starColors.Count)];
                 Renderer renderer = newStar.GetComponent<Renderer>();
@@ -211,7 +226,7 @@ public class StarSpawn : MonoBehaviour
         if (starRenderer != null) starRenderer.enabled = true;
         GameObject newStarParent = newStar.transform.parent.gameObject;
 
-        spawnedStars.Add(newStarParent);
+        //spawnedStars.Add(newStarParent);
     }
 
     IEnumerator RandomShootingStarEventRoutine()
@@ -286,8 +301,11 @@ public class StarSpawn : MonoBehaviour
             captureVFXIntensity = 200f;
             constantZPos = shootingStarConstantZPos;
             Rigidbody shootingStarRB = starParent.GetComponent<Rigidbody>();
-            shootingStarRB.useGravity = false;
-            shootingStarRB.linearVelocity = Vector3.zero;
+            Destroy(shootingStarRB);
+            //shootingStarRB.useGravity = false;
+            //shootingStarRB.linearVelocity = Vector3.zero;
+            //shootingStarRB.angularVelocity = Vector3.zero;
+            //shootingStarRB.isKinematic = true;
             starCol = star.GetComponent<MeshRenderer>().material.GetColor("_SecondaryColor");
             shootingStars.Remove(starParent);
         }
@@ -306,6 +324,10 @@ public class StarSpawn : MonoBehaviour
         //float randomZ = Random.Range(bounds.min.z, bounds.max.z);
 
         Vector3 randomPos = new Vector3(randomX, randomY, constantZPos);
+
+        //Disable collider
+        SphereCollider sphereCollider = starParent.GetComponent<SphereCollider>();
+        sphereCollider.enabled = false;
 
         StartCoroutine(MoveStar(starParent, randomPos));
     }
