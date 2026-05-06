@@ -2280,15 +2280,13 @@ MonoBehaviour:
   shootingStarShakeIntensity: 1
   shootingStarColors:
   - mainColor: {r: 1, g: 0, b: 0, a: 0}
-    secondaryColor: {r: 1, g: 0.92073464, b: 0, a: 0}
-  - mainColor: {r: 0.61580086, g: 0, b: 1, a: 0}
-    secondaryColor: {r: 0, g: 1, b: 0.005446434, a: 0}
-  - mainColor: {r: 1, g: 0, b: 0.03499937, a: 0}
-    secondaryColor: {r: 0, g: 0.94889164, b: 1, a: 0}
-  - mainColor: {r: 0.4276781, g: 0, b: 1, a: 0}
-    secondaryColor: {r: 1, g: 0.9437028, b: 0, a: 0}
+    secondaryColor: {r: 1, g: 1, b: 0, a: 0}
+  - mainColor: {r: 0, g: 0.085671425, b: 1, a: 0}
+    secondaryColor: {r: 0, g: 1, b: 0, a: 0}
+  - mainColor: {r: 0, g: 1, b: 0, a: 0}
+    secondaryColor: {r: 1, g: 1, b: 0, a: 0}
   - mainColor: {r: 0, g: 0.059907913, b: 1, a: 0}
-    secondaryColor: {r: 1, g: 0, b: 0.74399376, a: 0}
+    secondaryColor: {r: 1, g: 0, b: 1, a: 0}
   capturedStarArea: {fileID: 1305470643}
   scaleMin: 0.5
   scaleMax: 1.5
