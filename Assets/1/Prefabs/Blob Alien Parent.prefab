@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 562574144041789522}
   - component: {fileID: 7682422795830195581}
   - component: {fileID: 482249542721807886}
+  - component: {fileID: 4340981679879084301}
   m_Layer: 0
   m_Name: Blob Alien Parent
   m_TagString: Untagged
@@ -82,6 +83,21 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 6.3
   m_Center: {x: 0, y: -0.55, z: 0}
+--- !u!114 &4340981679879084301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577810539883512509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad07407b33beb24e82ec0dc5f960760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alienRotationSpeedMin: 2
+  alienRotationSpeedMax: 6
+  shrinkSpeed: 0.05
 --- !u!1001 &6086759893500293755
 PrefabInstance:
   m_ObjectHideFlags: 0

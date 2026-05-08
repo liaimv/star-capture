@@ -3043,7 +3043,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.62964654, y: -0.32178456, z: 0.32178456, w: -0.62964654}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1169386417}
@@ -3164,9 +3164,6 @@ MonoBehaviour:
   shootingScaleMin: 2
   shootingScaleMax: 2.5
   shootingStarAmountforAlien: 3
-  twirlMaxScale: 0.1
-  twirlMinScale: 0.03
-  twirlStartMinScale: 0.01
   forceAmountMin: 7
   forceAmountMax: 17
   shootingStarStartPosXMin: 35
@@ -3184,6 +3181,10 @@ MonoBehaviour:
     secondaryColor: {r: 0, g: 1, b: 0, a: 0}
   - mainColor: {r: 0, g: 0.059907913, b: 1, a: 0}
     secondaryColor: {r: 1, g: 0, b: 1, a: 0}
+  twirlMaxScale: 0.1
+  twirlMinScale: 0.04
+  twirlStartMinScale: 0.01
+  twirlDelay: 0.2
   capturedStarArea: {fileID: 1428611929}
   scaleMin: 1
   scaleMax: 1.5
@@ -3221,6 +3222,15 @@ MonoBehaviour:
   - {fileID: 8955133575577228912, guid: 1a25dcc1ba4fc054ba713bbf888db65b, type: 3}
   mergeSpeed: 2
   alienConstantZPos: -20
+  alienRotationSpeedMin: 10
+  alienRotationSpeedMax: 15
+  alienShrinkSpeedMin: 0.5
+  alienShrinkSpeedMax: 0.8
+  alienBackwardsSpeed: 0.15
+  alienPopDuration: 0.2
+  alienStartMinScale: 0.8
+  alienStartMaxScale: 1.2
+  alienOGScale: 1
   spawnedStars: []
   shootingStars: []
   capturedStars: []
