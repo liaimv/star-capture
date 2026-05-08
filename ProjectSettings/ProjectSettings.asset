@@ -823,23 +823,7 @@ PlayerSettings:
   webGLWebAssemblyBigInt: 0
   webGLCloseOnQuit: 0
   webWasm2023: 0
-  scriptingDefineSymbols:
-    Android: EXTOSC
-    EmbeddedLinux: EXTOSC
-    GameCoreScarlett: EXTOSC
-    GameCoreXboxOne: EXTOSC
-    Kepler: EXTOSC
-    LinuxHeadlessSimulation: EXTOSC
-    Nintendo Switch: EXTOSC
-    Nintendo Switch 2: EXTOSC
-    PS4: EXTOSC
-    PS5: EXTOSC
-    QNX: EXTOSC
-    Standalone: EXTOSC
-    VisionOS: EXTOSC
-    WebGL: EXTOSC
-    XboxOne: EXTOSC
-    tvOS: EXTOSC
+  scriptingDefineSymbols: {}
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
