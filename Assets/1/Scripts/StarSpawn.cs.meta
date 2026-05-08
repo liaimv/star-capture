@@ -1,2 +1,19 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: ee4ef83fd6a21334c9ef0ec3fd0d713c
+=======
+guid: ee4ef83fd6a21334c9ef0ec3fd0d713c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - starParentObject: {fileID: 919132149155446097, guid: 9bb2a0b99d5107744a2a2ca91d15942a, type: 3}
+  - spawnArea: {fileID: 919132149155446097, guid: 9bb2a0b99d5107744a2a2ca91d15942a, type: 3}
+  - shootingStarParentObject: {instanceID: 0}
+  - capturedStarArea: {instanceID: 0}
+  executionOrder: 100
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> Stashed changes
