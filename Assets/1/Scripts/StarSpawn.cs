@@ -29,6 +29,7 @@ public class StarSpawn : MonoBehaviour
     public int shootingStarAmountforAlien = 5;
     public float twirlMaxScale = 0.11f;
     public float twirlMinScale = 0.04f;
+    public float twirlStartMinScale = 0.01f;
 
     [Header("Shooting Star Transform Variables")]
     public float forceAmountMin = 10f;
@@ -470,19 +471,27 @@ public class StarSpawn : MonoBehaviour
         sparklesColor /= 100f;
         Color twirlColor = Color.Lerp(sparklesColor, Color.white, 0.3f);
         twirlMaterial.SetColor("_Color", twirlColor);
+        twirlObject.SetActive(false);
+        twirlObject.transform.localScale = Vector3.one * twirlStartMinScale;
 
         Vector3 targetPosition = new Vector3(randomStar.transform.position.x, randomStar.transform.position.y, alienConstantZPos);
 
+        StartCoroutine(MergeAlienTwirlDelay(group, targetPosition, typeIndex, twirlObject));
+    }
+
+    IEnumerator MergeAlienTwirlDelay(List<GameObject> group, Vector3 targetPosition, int typeIndex, GameObject twirlObject)
+    {
+        yield return new WaitForSeconds(delayCapture + 2f);
+
+        twirlObject.SetActive(true);
         StartCoroutine(MergeAlienAfterDelay(group, targetPosition, typeIndex, twirlObject));
     }
 
     private IEnumerator MergeAlienAfterDelay(List<GameObject> group, Vector3 targetPosition, int typeIndex, GameObject twirlObject)
     {
         Vector3 twirlObjectMinScale = new Vector4(twirlMinScale, twirlMinScale, twirlMinScale);
+        Vector3 twirlObjectStartMinScale = new Vector4(twirlStartMinScale, twirlStartMinScale, twirlStartMinScale);
         Vector3 twirlObjectMaxScale = new Vector3(twirlMaxScale, twirlMaxScale, twirlMaxScale);
-
-        twirlObject.transform.localScale = twirlObjectMinScale;
-        twirlObject.SetActive(true);
 
         float growTime = delayCapture + 1f;
         float t1 = 0f;
@@ -490,7 +499,7 @@ public class StarSpawn : MonoBehaviour
         while (t1 < growTime)
         {
             float t = t1 / growTime;
-            twirlObject.transform.localScale = Vector3.Lerp(twirlObjectMinScale, twirlObjectMaxScale, t);
+            twirlObject.transform.localScale = Vector3.Lerp(twirlObjectStartMinScale, twirlObjectMaxScale, t);
 
             t1 += Time.deltaTime;
             yield return null;
