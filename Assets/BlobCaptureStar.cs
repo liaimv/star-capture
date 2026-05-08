@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class BlobCaptureStar : MonoBehaviour
 {
+    public StarSpawn starSpawn;
+
     [Header("OSC inputs (raw)")]
     public float blobX;
     public float blobY;
@@ -72,17 +74,20 @@ public class BlobCaptureStar : MonoBehaviour
             var go = hits[i].transform.root.gameObject;
             if (!go.activeInHierarchy) continue;
 
-            hoveredThisFrame.Add(go);
+            starSpawn.MoveSequence(go);
+            go.layer = LayerMask.NameToLayer("Default");
 
-            hoverTimers.TryGetValue(go, out float time);
-            time += Time.deltaTime;
-            hoverTimers[go] = time;
+            //hoveredThisFrame.Add(go);
 
-            if (time >= hoverSeconds)
-            {
-                go.SetActive(false);
-                hoverTimers.Remove(go);
-            }
+            //hoverTimers.TryGetValue(go, out float time);
+            //time += Time.deltaTime;
+            //hoverTimers[go] = time;
+
+            //if (time >= hoverSeconds)
+            //{
+            //    go.SetActive(false);
+            //    hoverTimers.Remove(go);
+            //}
         }
 
         // Reset timers for stars no longer hovered
