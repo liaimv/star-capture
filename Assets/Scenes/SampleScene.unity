@@ -260,7 +260,7 @@ MonoBehaviour:
   starsZ: -1.9
   requireActive: 1
   captureRadiusWorld: 10
-  hoverSeconds: 0.25
+  hoverSeconds: 0.2
   starLayer:
     serializedVersion: 2
     m_Bits: 128
