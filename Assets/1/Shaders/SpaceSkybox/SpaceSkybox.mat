@@ -73,8 +73,8 @@ Material:
     - _SkyYRotationSpeed: -0.5
     - _SmoothstepEdge: -0.06
     - _StarRotationSpeed: 0.01
-    - _StarScale: 1500
-    - _StarStep: 0.8
+    - _StarScale: 860.1
+    - _StarStep: 0.77
     - _Threshold: 0.49
     m_Colors:
     - _BottomColor: {r: 0.8259624, g: 0.45283008, b: 0.9056604, a: 1}
