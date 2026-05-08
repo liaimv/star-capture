@@ -457,7 +457,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.62964654, y: -0.32178456, z: 0.32178456, w: -0.62964654}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.11, y: 0.11, z: 0.11}
+  m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 543450651977224446}
@@ -2522,7 +2522,8 @@ MonoBehaviour:
   shootingScaleMax: 2.5
   shootingStarAmountforAlien: 3
   twirlMaxScale: 0.1
-  twirlMinScale: 0.05
+  twirlMinScale: 0.03
+  twirlStartMinScale: 0.01
   forceAmountMin: 7
   forceAmountMax: 17
   shootingStarStartPosXMin: 35
