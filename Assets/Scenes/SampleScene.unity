@@ -2540,7 +2540,7 @@ MonoBehaviour:
   - mainColor: {r: 1, g: 1, b: 0, a: 0}
     secondaryColor: {r: 0, g: 1, b: 0, a: 0}
   - mainColor: {r: 0, g: 0.059907913, b: 1, a: 0}
-    secondaryColor: {r: 1, g: 0, b: 0.74399376, a: 0}
+    secondaryColor: {r: 1, g: 0, b: 1, a: 0}
   capturedStarArea: {fileID: 1305470643}
   scaleMin: 1
   scaleMax: 1.5
