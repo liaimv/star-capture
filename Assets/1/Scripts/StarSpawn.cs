@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.VFX;
 using System.Collections;
+using Unity.VisualScripting;
+using TMPro;
 
 [System.Serializable]
 public struct ShootingStarColorPair
@@ -24,6 +26,9 @@ public class StarSpawn : MonoBehaviour
     [Header("Shooting Star Scale Variable")]
     public float shootingScaleMin = 1.5f;
     public float shootingScaleMax = 2.5f;
+    public int shootingStarAmountforAlien = 5;
+    public float twirlMaxScale = 0.11f;
+    public float twirlMinScale = 0.04f;
 
     [Header("Shooting Star Transform Variables")]
     public float forceAmountMin = 10f;
@@ -65,6 +70,12 @@ public class StarSpawn : MonoBehaviour
     private VisualEffect captureImpact;
     public float spawnVFXDelay = 0.5f;
     public float spawnStarDelay = 0.5f;
+
+    [Header("Alien Variables")]
+    public List<GameObject> alienPrefabs;
+    public float mergeSpeed = 5f;
+    public float alienConstantZPos = -7f;
+    private Dictionary<int, List<GameObject>> shootingStarGroups = new Dictionary<int, List<GameObject>>();
 
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
@@ -111,7 +122,16 @@ public class StarSpawn : MonoBehaviour
                     0
                 );
 
-                capturedStars[i].transform.position += floatOffset * Time.deltaTime;
+                Rigidbody rb = capturedStars[i].GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    rb.MovePosition(rb.position + floatOffset * Time.deltaTime);
+                }
+                else
+                {
+                    capturedStars[i].transform.position += floatOffset * Time.deltaTime;
+                }
 
                 if (capturedStars[i].CompareTag("Star")) //Shrink only normal stars
                 {
@@ -122,6 +142,10 @@ public class StarSpawn : MonoBehaviour
                     if (scale.x < minScale)
                     {
                         scale = Vector3.one * minScale;
+                        GameObject star = capturedStars[i];
+                        capturedStars.Remove(star);
+                        Destroy(star.gameObject);
+                        return;
                     }
 
                     capturedStars[i].transform.localScale = scale;
@@ -203,7 +227,7 @@ public class StarSpawn : MonoBehaviour
 
                 if (spawnVFX != null && starRenderer != null)
                 {
-                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, newStar));
+                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, null));
                 }
             }
 
@@ -211,20 +235,24 @@ public class StarSpawn : MonoBehaviour
         }
     }
 
-    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject newStar)
+    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject sparkleVFXObject)
     {
         yield return new WaitForSeconds(spawnVFXDelay);
         if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 0f);
 
-        StartCoroutine(ShowStarAfterDelay(starRenderer, newStar));
+        StartCoroutine(ShowStarAfterDelay(starRenderer, sparkleVFXObject));
     }
 
-    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject newStar)
+    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject sparkleVFXObject)
     {
         yield return new WaitForSeconds(spawnStarDelay);
 
+        if (sparkleVFXObject != null)
+        {
+            sparkleVFXObject.SetActive(true);
+        }
         if (starRenderer != null) starRenderer.enabled = true;
-        GameObject newStarParent = newStar.transform.parent.gameObject;
+        //GameObject newStarParent = newStar.transform.parent.gameObject;
 
         //spawnedStars.Add(newStarParent);
     }
@@ -251,7 +279,10 @@ public class StarSpawn : MonoBehaviour
         shootingStarParent.SetActive(true);
 
         //Shooting star color initialization
-        ShootingStarColorPair colorPair = shootingStarColors[Random.Range(0, shootingStarColors.Count)];
+        int colorIndex = Random.Range(0, shootingStarColors.Count);
+        ShootingStarColorPair colorPair = shootingStarColors[colorIndex];
+
+        shootingStarParent.name = "ShootingStar_" + colorIndex;
 
         Renderer shootingStarRenderer = shootingStar.GetComponent<Renderer>();
 
@@ -301,10 +332,15 @@ public class StarSpawn : MonoBehaviour
             captureVFXIntensity = 200f;
             constantZPos = shootingStarConstantZPos;
             Rigidbody shootingStarRB = starParent.GetComponent<Rigidbody>();
-            Destroy(shootingStarRB);
-            //shootingStarRB.useGravity = false;
-            //shootingStarRB.linearVelocity = Vector3.zero;
-            //shootingStarRB.angularVelocity = Vector3.zero;
+
+            Vector3 v = shootingStarRB.linearVelocity;
+            if (v.x < 0f) v.x = 0f;
+            shootingStarRB.linearVelocity = v;
+
+            //Destroy(shootingStarRB);
+            shootingStarRB.useGravity = false;
+            shootingStarRB.linearVelocity = Vector3.zero;
+            shootingStarRB.angularVelocity = Vector3.zero;
             //shootingStarRB.isKinematic = true;
             starCol = star.GetComponent<MeshRenderer>().material.GetColor("_SecondaryColor");
             shootingStars.Remove(starParent);
@@ -326,8 +362,8 @@ public class StarSpawn : MonoBehaviour
         Vector3 randomPos = new Vector3(randomX, randomY, constantZPos);
 
         //Disable collider
-        SphereCollider sphereCollider = starParent.GetComponent<SphereCollider>();
-        sphereCollider.enabled = false;
+        //SphereCollider sphereCollider = starParent.GetComponent<SphereCollider>();
+        //sphereCollider.enabled = false;
 
         StartCoroutine(MoveStar(starParent, randomPos));
     }
@@ -340,7 +376,165 @@ public class StarSpawn : MonoBehaviour
 
         star.transform.GetChild(0).gameObject.SetActive(false); //Stop CapturedImpact VFX
 
-        starParent.transform.position = newPos;
+        Rigidbody rb = starParent.GetComponent<Rigidbody>();
+
+        MeshRenderer starRenderer = star.transform.GetComponent<MeshRenderer>();
+        starRenderer.enabled = false;
+
+        GameObject sparklesVFXObject = null;
+        Vector4 sparklesColor = new Vector4(0, 0, 0, 0);
+        GameObject spawnVFXObject = null;
+
+        VisualEffect spawnVFX = null;
+
+        if (rb != null)
+        {
+            sparklesVFXObject = star.transform.GetChild(1).gameObject;
+            VisualEffect sparklesVFX = star.transform.GetChild(1).GetComponent<VisualEffect>();
+            sparklesColor = sparklesVFX.GetVector4("SecondaryColor");
+            sparklesColor *= 100;
+            sparklesVFXObject.SetActive(false);
+
+            spawnVFXObject = star.transform.GetChild(2).gameObject;
+            spawnVFX = spawnVFXObject.GetComponent<VisualEffect>();
+            spawnVFX.SetVector4("SpawnColor", sparklesColor);
+            if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 100f);
+            spawnVFXObject.SetActive(true);
+
+            rb.position = newPos;
+        }
+        else
+        {
+            spawnVFXObject = star.transform.GetChild(1).gameObject;
+            spawnVFX = spawnVFXObject.GetComponent<VisualEffect>();
+            if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 100f);
+
+            starParent.transform.position = newPos;
+        }
+
         capturedStars.Add(starParent);
+
+        //Naming shooting stars and group same colored ones
+        if (starParent.name.StartsWith("ShootingStar_"))
+        {
+            int typeIndex = int.Parse(starParent.name.Split('_')[1]);
+
+            if (!shootingStarGroups.ContainsKey(typeIndex))
+            {
+                shootingStarGroups[typeIndex] = new List<GameObject>();
+            }
+            
+            shootingStarGroups[typeIndex].Add(starParent);
+            
+            if (shootingStarGroups[typeIndex].Count >= shootingStarAmountforAlien)
+            {
+                StartCoroutine(MergeIntoAlien(typeIndex, sparklesColor));
+            }
+        }
+
+        StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, sparklesVFXObject));
+    }
+
+    private IEnumerator MergeIntoAlien(int typeIndex, Vector4 sparklesColor)
+    {
+        List<GameObject> group = new List<GameObject>(shootingStarGroups[typeIndex]);
+        shootingStarGroups[typeIndex].Clear();
+
+        //Make sure all shooting stars are captured before merging into an alien
+        bool allCaptured = false;
+
+        while (!allCaptured)
+        {
+            allCaptured = true;
+
+            foreach (GameObject shootingStar in group)
+            {
+                if (!capturedStars.Contains(shootingStar))
+                {
+                    allCaptured = false;
+                    break;
+                }
+            }
+
+            yield return null;
+        }
+
+        //Get center point of shootingStars
+        int randomIndex = Random.Range(0, group.Count - 1);
+        GameObject randomStar = group[randomIndex];
+
+        GameObject star = randomStar.transform.GetChild(0).gameObject;
+        GameObject twirlObject = star.transform.GetChild(3).gameObject;
+        Renderer twirlRenderer = twirlObject.GetComponent<Renderer>();
+        Material twirlMaterial = twirlRenderer.material;
+        sparklesColor /= 100f;
+        Color twirlColor = Color.Lerp(sparklesColor, Color.white, 0.3f);
+        twirlMaterial.SetColor("_Color", twirlColor);
+
+        Vector3 targetPosition = new Vector3(randomStar.transform.position.x, randomStar.transform.position.y, alienConstantZPos);
+
+        StartCoroutine(MergeAlienAfterDelay(group, targetPosition, typeIndex, twirlObject));
+    }
+
+    private IEnumerator MergeAlienAfterDelay(List<GameObject> group, Vector3 targetPosition, int typeIndex, GameObject twirlObject)
+    {
+        Vector3 twirlObjectMinScale = new Vector4(twirlMinScale, twirlMinScale, twirlMinScale);
+        Vector3 twirlObjectMaxScale = new Vector3(twirlMaxScale, twirlMaxScale, twirlMaxScale);
+
+        twirlObject.transform.localScale = twirlObjectMinScale;
+        twirlObject.SetActive(true);
+
+        float growTime = delayCapture + 1f;
+        float t1 = 0f;
+
+        while (t1 < growTime)
+        {
+            float t = t1 / growTime;
+            twirlObject.transform.localScale = Vector3.Lerp(twirlObjectMinScale, twirlObjectMaxScale, t);
+
+            t1 += Time.deltaTime;
+            yield return null;
+        }
+
+        twirlObject.transform.localScale = twirlObjectMaxScale;
+
+
+        //yield return new WaitForSeconds(delayCapture + 1f);
+
+        //Move shooting star to each other
+        float elapsed = 0f;
+        while (elapsed < 1f)
+        {
+            twirlObject.transform.localScale = Vector3.Lerp(twirlObject.transform.localScale, twirlObjectMinScale, Time.deltaTime * mergeSpeed);
+            foreach (GameObject shootingStar in group)
+            {
+                if (shootingStar != null)
+                {
+                    shootingStar.transform.position = Vector3.Lerp(shootingStar.transform.position, targetPosition, Time.deltaTime * mergeSpeed);
+                    Rigidbody rb = shootingStar.GetComponent<Rigidbody>();
+                    rb.isKinematic = true;
+                }
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        //Remove shootingStar from capturedStars list and Destroy
+        foreach (GameObject shootingStar in group)
+        {
+            capturedStars.Remove(shootingStar);
+            Destroy(shootingStar);
+        }
+
+        twirlObject.SetActive(false);
+
+        //Spawn Alien
+        if (typeIndex < alienPrefabs.Count)
+        {
+            Quaternion alienRotation = Quaternion.Euler(0, 180f, 0);
+
+            GameObject alien = Instantiate(alienPrefabs[typeIndex], targetPosition, alienRotation);
+            capturedStars.Add(alien);
+        }
     }
 }
