@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 78092349}
   - component: {fileID: 78092348}
   - component: {fileID: 78092351}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingStarParent
   m_TagString: Shooting Star
   m_Icon: {fileID: 0}
@@ -2007,7 +2007,7 @@ GameObject:
   - component: {fileID: 1289456278}
   - component: {fileID: 1289456280}
   - component: {fileID: 1289456279}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_CaptureImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2971,7 +2971,7 @@ GameObject:
   - component: {fileID: 2065118577}
   - component: {fileID: 2065118579}
   - component: {fileID: 2065118578}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_Sparkles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3231,7 +3231,7 @@ GameObject:
   - component: {fileID: 543450651977224446}
   - component: {fileID: 3469287838107934555}
   - component: {fileID: 1711813855120812945}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingStarBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
