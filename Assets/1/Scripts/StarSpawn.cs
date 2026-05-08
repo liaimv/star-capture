@@ -72,6 +72,10 @@ public class StarSpawn : MonoBehaviour
     public float spawnVFXDelay = 0.5f;
     public float spawnStarDelay = 0.5f;
 
+    [Header("Star Audio")]
+    public List<AudioClip> starAudioClips;         // Same order as starColors list
+    public List<AudioClip> shootingStarAudioClips; // Same order as shootingStarColors list
+
     [Header("Alien Variables")]
     public List<GameObject> alienPrefabs;
     public float mergeSpeed = 5f;
@@ -210,9 +214,14 @@ public class StarSpawn : MonoBehaviour
                 spawnedStars.Add(newStarParent);
 
                 //Random color
-                Color randomColor = starColors[Random.Range(0, starColors.Count)];
+                int colorIndex = Random.Range(0, starColors.Count);
+                Color randomColor = starColors[colorIndex];
                 Renderer renderer = newStar.GetComponent<Renderer>();
                 renderer.material.SetColor("_EmissionColor", randomColor);
+
+                // Assign matching audio clip to this star
+                AudioClip starClip = (colorIndex < starAudioClips.Count) ? starAudioClips[colorIndex] : null;
+                newStarParent.GetComponent<StarAudio>()?.SetClip(starClip);
 
                 VisualEffect spawnVFX = newStar.transform.GetChild(1).GetComponent<VisualEffect>();
                 MeshRenderer starRenderer = newStar.GetComponent<MeshRenderer>();
@@ -290,6 +299,10 @@ public class StarSpawn : MonoBehaviour
         shootingStarRenderer.material.SetColor("_MainColor", colorPair.mainColor);
         shootingStarRenderer.material.SetColor("_SecondaryColor", colorPair.secondaryColor);
 
+        // Assign matching audio clip to this shooting star
+        AudioClip shootingClip = (colorIndex < shootingStarAudioClips.Count) ? shootingStarAudioClips[colorIndex] : null;
+        shootingStarParent.GetComponent<StarAudio>()?.SetClip(shootingClip);
+
         //Shooting star sparkles VFX color
         VisualEffect sparklesVFX = shootingStar.transform.GetChild(1).GetComponent<VisualEffect>();
         sparklesVFX.SetVector4("MainColor", colorPair.mainColor);
@@ -346,6 +359,9 @@ public class StarSpawn : MonoBehaviour
             starCol = star.GetComponent<MeshRenderer>().material.GetColor("_SecondaryColor");
             shootingStars.Remove(starParent);
         }
+
+        // Play the color-matched capture sound
+        starParent.GetComponent<StarAudio>()?.PlayCaptureSound();
 
         //Captured VFX
         captureImpact = star.transform.GetChild(0).GetComponent<VisualEffect>();
