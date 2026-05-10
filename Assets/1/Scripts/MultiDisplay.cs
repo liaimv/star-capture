@@ -6,7 +6,7 @@ public class MultiDisplay : MonoBehaviour
     {
         for (int i = 1; i < Display.displays.Length; i++)
         {
-            Display.displays[i].Activate();
+            Display.displays[i].Activate(1920, 1080, 60);
         }
     }
 }
