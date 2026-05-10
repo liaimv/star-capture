@@ -251,7 +251,7 @@ public class StarSpawn : MonoBehaviour
 
                 if (spawnVFX != null && starRenderer != null)
                 {
-                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, null));
+                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, null, newStarParent));
                 }
             }
 
@@ -259,15 +259,15 @@ public class StarSpawn : MonoBehaviour
         }
     }
 
-    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject sparkleVFXObject)
+    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject sparkleVFXObject, GameObject starParent)
     {
         yield return new WaitForSeconds(spawnVFXDelay);
         if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 0f);
 
-        StartCoroutine(ShowStarAfterDelay(starRenderer, sparkleVFXObject));
+        StartCoroutine(ShowStarAfterDelay(starRenderer, sparkleVFXObject, starParent));
     }
 
-    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject sparkleVFXObject)
+    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject sparkleVFXObject, GameObject starParent)
     {
         yield return new WaitForSeconds(spawnStarDelay);
 
@@ -276,6 +276,9 @@ public class StarSpawn : MonoBehaviour
             sparkleVFXObject.SetActive(true);
         }
         if (starRenderer != null) starRenderer.enabled = true;
+
+        starParent.layer = LayerMask.NameToLayer("Star");
+
         //GameObject newStarParent = newStar.transform.parent.gameObject;
 
         //spawnedStars.Add(newStarParent);
@@ -463,7 +466,7 @@ public class StarSpawn : MonoBehaviour
             }
         }
 
-        StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, sparklesVFXObject));
+        StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, sparklesVFXObject, starParent));
     }
 
     private IEnumerator MergeIntoAlien(int typeIndex, Vector4 sparklesColor)

@@ -8,7 +8,7 @@ public class BlobReceiver : MonoBehaviour
 
     void Start()
     {
-        receiver.Bind("/blob", OnBlobReceived);
+        receiver.Bind("/active", OnBlobReceived);
     }
 
     void OnBlobReceived(OSCMessage message)

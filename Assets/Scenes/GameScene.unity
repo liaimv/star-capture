@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 3337158}
   - component: {fileID: 3337160}
   - component: {fileID: 3337159}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: VFX_Respawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,8 @@ GameObject:
   - component: {fileID: 109506928}
   - component: {fileID: 109506927}
   - component: {fileID: 109506926}
-  m_Layer: 7f0473a68bcc641c65183b4b21a7fd6d
+  - component: {fileID: 109506929}
+  m_Layer: 0
   m_Name: StarParent
   m_TagString: Star
   m_Icon: {fileID: 0}
@@ -514,8 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0fdd41ace3c4163b059a912d956ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
-  starSpawn: {fileID: 0}
+  starSpawn: {fileID: 1525726272}
   blobX: 0
   blobY: 0
   active: 0
@@ -527,7 +527,7 @@ MonoBehaviour:
   worldCamera: {fileID: 1779416122}
   starsZ: -1.9
   requireActive: 1
-  captureRadiusWorld: 15
+  captureRadiusWorld: 10
   hoverSeconds: 0.2
   starLayer:
     serializedVersion: 2
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 187043570}
   - component: {fileID: 187043569}
   - component: {fileID: 187043568}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2104,7 +2104,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 2
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -2800,7 +2800,7 @@ GameObject:
   - component: {fileID: 1427509528}
   - component: {fileID: 1427509530}
   - component: {fileID: 1427509529}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: VFX_CaptureImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3135,7 +3135,6 @@ GameObject:
   - component: {fileID: 1525726272}
   - component: {fileID: 1525726275}
   - component: {fileID: 1525726276}
-
   - component: {fileID: 1525726277}
   - component: {fileID: 1525726278}
   m_Layer: 0
@@ -3160,13 +3159,13 @@ MonoBehaviour:
   starParentObject: {fileID: 109506925}
   spawnArea: {fileID: 1385646274}
   shootingStarParentObject: {fileID: 1560164760}
-  shootingStarEventDelayMin: 1
-  shootingStarEventDelayMax: 2
+  shootingStarEventDelayMin: 3
+  shootingStarEventDelayMax: 8
   shootingScaleMin: 2
   shootingScaleMax: 2.5
   shootingStarAmountforAlien: 3
-  forceAmountMin: 7
-  forceAmountMax: 17
+  forceAmountMin: 0.5
+  forceAmountMax: 2
   shootingStarStartPosXMin: 35
   shootingStarStartPosXMax: 60
   shootingStarStartPosYMin: -3.5
@@ -3189,7 +3188,7 @@ MonoBehaviour:
   capturedStarArea: {fileID: 1428611929}
   scaleMin: 1
   scaleMax: 1.5
-  spawnInterval: 0.5
+  spawnInterval: 1
   minDistanceBetweenStars: 5
   maxStars: 30
   starConstantZPos: 2
@@ -3197,13 +3196,12 @@ MonoBehaviour:
   minScale: 0
   starShakeIntensity: 0.4
   starColors:
-  - {r: 11.984315, g: 0, b: 0, a: 0}
   - {r: 11.984315, g: 11.225195, b: 0, a: 0}
   - {r: 0, g: 16, b: 0, a: 0}
   - {r: 0, g: 11.006889, b: 11.984315, a: 0}
-  - {r: 0, g: 6.7764697, b: 64, a: 0}
-  - {r: 11.984315, g: 0, b: 9.9241905, a: 0}
+  - {r: 15.999998, g: 0, b: 8.229568, a: 0}
   - {r: 11.984315, g: 11.984315, b: 11.984315, a: 0}
+  - {r: 16, g: 0, b: 0, a: 0}
   delayCapture: 0.5
   spawnVFXDelay: 0.4
   spawnStarDelay: 0.5
@@ -3293,7 +3291,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525726271}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3b8a1e331db8714283e00adfcb10354, type: 3}
   m_Name: 
@@ -3450,7 +3448,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1560164760}
   serializedVersion: 4
-  m_Mass: 0.5
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -3542,9 +3540,9 @@ MonoBehaviour:
   _closeOnPause: 0
   _mapBundle: {fileID: 0}
   _workInEditor: 1
-  _localHostMode: 0
+  _localHostMode: 1
   _localHost: 127.0.0.1
-  _localPort: 10000
+  _localPort: 10001
 --- !u!114 &1615858764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3718,7 +3716,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
