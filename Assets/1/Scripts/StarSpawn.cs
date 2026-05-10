@@ -27,9 +27,6 @@ public class StarSpawn : MonoBehaviour
     public float shootingScaleMin = 1.5f;
     public float shootingScaleMax = 2.5f;
     public int shootingStarAmountforAlien = 5;
-    public float twirlMaxScale = 0.11f;
-    public float twirlMinScale = 0.04f;
-    public float twirlStartMinScale = 0.01f;
 
     [Header("Shooting Star Transform Variables")]
     public float forceAmountMin = 10f;
@@ -43,6 +40,12 @@ public class StarSpawn : MonoBehaviour
 
     [Header("Shooting Star Visual Variables")]
     public List<ShootingStarColorPair> shootingStarColors;
+
+    [Header("Twirl Variable")]
+    public float twirlMaxScale = 0.11f;
+    public float twirlMinScale = 0.04f;
+    public float twirlStartMinScale = 0.01f;
+    public float twirlDelay = 0.2f;
 
     [Header("Captured Star Variables")]
     public GameObject capturedStarArea;
@@ -81,6 +84,17 @@ public class StarSpawn : MonoBehaviour
     public float mergeSpeed = 5f;
     public float alienConstantZPos = -7f;
     private Dictionary<int, List<GameObject>> shootingStarGroups = new Dictionary<int, List<GameObject>>();
+
+    [Header("Alien Transform Variables")]
+    public float alienRotationSpeedMin = 2f;
+    public float alienRotationSpeedMax = 6f;
+    public float alienShrinkSpeedMin = 0.005f;
+    public float alienShrinkSpeedMax = 0.01f;
+    public float alienBackwardsSpeed;
+    public float alienPopDuration = 0.2f;
+    public float alienStartMinScale = 0.9f;
+    public float alienStartMaxScale = 1.1f;
+    public float alienOGScale = 1f;
 
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
@@ -237,7 +251,7 @@ public class StarSpawn : MonoBehaviour
 
                 if (spawnVFX != null && starRenderer != null)
                 {
-                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, null));
+                    StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, null, newStarParent));
                 }
             }
 
@@ -245,15 +259,15 @@ public class StarSpawn : MonoBehaviour
         }
     }
 
-    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject sparkleVFXObject)
+    private IEnumerator StopSpawnVFXAfterDelay(VisualEffect spawnVFX, MeshRenderer starRenderer, GameObject sparkleVFXObject, GameObject starParent)
     {
         yield return new WaitForSeconds(spawnVFXDelay);
         if (spawnVFX != null) spawnVFX.SetFloat("SpawnRate", 0f);
 
-        StartCoroutine(ShowStarAfterDelay(starRenderer, sparkleVFXObject));
+        StartCoroutine(ShowStarAfterDelay(starRenderer, sparkleVFXObject, starParent));
     }
 
-    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject sparkleVFXObject)
+    private IEnumerator ShowStarAfterDelay(MeshRenderer starRenderer, GameObject sparkleVFXObject, GameObject starParent)
     {
         yield return new WaitForSeconds(spawnStarDelay);
 
@@ -262,6 +276,9 @@ public class StarSpawn : MonoBehaviour
             sparkleVFXObject.SetActive(true);
         }
         if (starRenderer != null) starRenderer.enabled = true;
+
+        starParent.layer = LayerMask.NameToLayer("Star");
+
         //GameObject newStarParent = newStar.transform.parent.gameObject;
 
         //spawnedStars.Add(newStarParent);
@@ -449,7 +466,7 @@ public class StarSpawn : MonoBehaviour
             }
         }
 
-        StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, sparklesVFXObject));
+        StartCoroutine(StopSpawnVFXAfterDelay(spawnVFX, starRenderer, sparklesVFXObject, starParent));
     }
 
     private IEnumerator MergeIntoAlien(int typeIndex, Vector4 sparklesColor)
@@ -497,7 +514,7 @@ public class StarSpawn : MonoBehaviour
 
     IEnumerator MergeAlienTwirlDelay(List<GameObject> group, Vector3 targetPosition, int typeIndex, GameObject twirlObject)
     {
-        yield return new WaitForSeconds(delayCapture + 2f);
+        yield return new WaitForSeconds(delayCapture + 0.5f);
 
         twirlObject.SetActive(true);
         StartCoroutine(MergeAlienAfterDelay(group, targetPosition, typeIndex, twirlObject));
@@ -524,8 +541,6 @@ public class StarSpawn : MonoBehaviour
         twirlObject.transform.localScale = twirlObjectMaxScale;
 
 
-        //yield return new WaitForSeconds(delayCapture + 1f);
-
         //Move shooting star to each other
         float elapsed = 0f;
         while (elapsed < 1f)
@@ -543,6 +558,8 @@ public class StarSpawn : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        yield return new WaitForSeconds(twirlDelay);
 
         //Remove shootingStar from capturedStars list and Destroy
         foreach (GameObject shootingStar in group)

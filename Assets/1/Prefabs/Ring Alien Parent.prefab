@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6090563925565722650}
   - component: {fileID: 8591144874148317202}
   - component: {fileID: 7322895077974444848}
+  - component: {fileID: 250186004648392112}
   m_Layer: 0
   m_Name: Ring Alien Parent
   m_TagString: Untagged
@@ -82,6 +83,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
+--- !u!114 &250186004648392112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061845067365941267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad07407b33beb24e82ec0dc5f960760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alienRotationSpeedMin: 2
+  alienRotationSpeedMax: 6
+  shrinkSpeed: 0.05
 --- !u!1001 &6424627508283877449
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6474357606305111550}
   - component: {fileID: 4276856703156569892}
   - component: {fileID: 992270733056579653}
+  - component: {fileID: 2547089783797057778}
   m_Layer: 0
   m_Name: Double Alien Parent
   m_TagString: Untagged
@@ -82,6 +83,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
+--- !u!114 &2547089783797057778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083630228759987779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad07407b33beb24e82ec0dc5f960760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alienRotationSpeedMin: 2
+  alienRotationSpeedMax: 6
+  shrinkSpeed: 0.05
 --- !u!1001 &651587108092366966
 PrefabInstance:
   m_ObjectHideFlags: 0
