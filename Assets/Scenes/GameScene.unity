@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 3337158}
   - component: {fileID: 3337160}
   - component: {fileID: 3337159}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_Respawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 109506928}
   - component: {fileID: 109506927}
   - component: {fileID: 109506926}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: StarParent
   m_TagString: Star
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 133183553}
   - component: {fileID: 133183555}
   - component: {fileID: 133183554}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_Sparkles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,6 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0fdd41ace3c4163b059a912d956ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  starSpawn: {fileID: 1525726272}
   blobX: 0
   blobY: 0
   active: 0
@@ -506,7 +507,7 @@ MonoBehaviour:
   worldCamera: {fileID: 1779416122}
   starsZ: -1.9
   requireActive: 1
-  captureRadiusWorld: 10
+  captureRadiusWorld: 15
   hoverSeconds: 0.2
   starLayer:
     serializedVersion: 2
@@ -538,7 +539,7 @@ GameObject:
   - component: {fileID: 187043570}
   - component: {fileID: 187043569}
   - component: {fileID: 187043568}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1585,7 +1586,7 @@ GameObject:
   - component: {fileID: 711980000}
   - component: {fileID: 711980002}
   - component: {fileID: 711980001}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_CaptureImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2118,7 +2119,7 @@ GameObject:
   - component: {fileID: 1169386417}
   - component: {fileID: 1169386419}
   - component: {fileID: 1169386418}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingStarBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2762,8 +2763,8 @@ Transform:
   m_GameObject: {fileID: 1385646274}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -23.1, z: 0}
-  m_LocalScale: {x: 57.958256, y: 28.59333, z: 0.5655496}
+  m_LocalPosition: {x: 6.2429, y: -23.1, z: 0}
+  m_LocalScale: {x: 45.474747, y: 28.59333, z: 0.5655496}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2779,7 +2780,7 @@ GameObject:
   - component: {fileID: 1427509528}
   - component: {fileID: 1427509530}
   - component: {fileID: 1427509529}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_CaptureImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3005,7 +3006,7 @@ GameObject:
   - component: {fileID: 1439129248}
   - component: {fileID: 1439129247}
   - component: {fileID: 1439129246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Twirl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3114,7 +3115,6 @@ GameObject:
   - component: {fileID: 1525726272}
   - component: {fileID: 1525726275}
   - component: {fileID: 1525726276}
-  - component: {fileID: 1525726277}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3244,21 +3244,6 @@ MonoBehaviour:
   flipY: 1
   swapXY: 0
   hoverSeconds: 0.2
---- !u!114 &1525726277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1525726271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3b8a1e331db8714283e00adfcb10354, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionCamera: {fileID: 1779416122}
-  rayDistanceStar: 40
-  rayDistanceShootingStar: 35
 --- !u!1 &1554344513
 GameObject:
   m_ObjectHideFlags: 0
@@ -3362,7 +3347,7 @@ GameObject:
   - component: {fileID: 1560164763}
   - component: {fileID: 1560164762}
   - component: {fileID: 1560164761}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingStarParent
   m_TagString: Shooting Star
   m_Icon: {fileID: 0}
@@ -3686,6 +3671,78 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1847158491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847158492}
+  - component: {fileID: 1847158494}
+  - component: {fileID: 1847158493}
+  m_Layer: 5
+  m_Name: RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1847158492
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847158491}
+  m_LocalRotation: {x: -0, y: -0, z: -0.062266923, w: 0.9980596}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 6.2224894, y: 19.397432, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2022089236}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -7.14}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -873, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1847158493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847158491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1847158494
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847158491}
+  m_CullTransparentMesh: 1
 --- !u!1 &1930828815
 GameObject:
   m_ObjectHideFlags: 0
@@ -3697,7 +3754,7 @@ GameObject:
   - component: {fileID: 1930828816}
   - component: {fileID: 1930828818}
   - component: {fileID: 1930828817}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: VFX_Respawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3895,6 +3952,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 417592811}
+  - {fileID: 1847158492}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
