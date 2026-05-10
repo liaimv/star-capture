@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 109506928}
   - component: {fileID: 109506927}
   - component: {fileID: 109506926}
-  m_Layer: 7
+  m_Layer: 7f0473a68bcc641c65183b4b21a7fd6d
   m_Name: StarParent
   m_TagString: Star
   m_Icon: {fileID: 0}
@@ -340,6 +340,25 @@ Transform:
   - {fileID: 187043567}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109506929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109506925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f81c621b30f3c4db1b7391435928789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whiteClip: {fileID: 8300000, guid: 73fc56d0d70884337925decbafed7103, type: 3}
+  pinkClip: {fileID: 8300000, guid: d783d5ac5bf8d4dee8a0371dc5d4bb72, type: 3}
+  yellowClip: {fileID: 8300000, guid: f6256da55189c465dba3973f1ee7dc3d, type: 3}
+  redClip: {fileID: 8300000, guid: c277eeb566bed4cdb851ef417ce5c19e, type: 3}
+  greenClip: {fileID: 8300000, guid: 0315d1e68a7ec4439bd3136ad620e74b, type: 3}
+  blueClip: {fileID: 8300000, guid: 88fb77aa0dfea446c965de75c10930ec, type: 3}
+  volume: 1
 --- !u!1 &133183552
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0fdd41ace3c4163b059a912d956ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starSpawn: {fileID: 1525726272}
+
+  starSpawn: {fileID: 0}
   blobX: 0
   blobY: 0
   active: 0
@@ -3023,7 +3043,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.62964654, y: -0.32178456, z: 0.32178456, w: -0.62964654}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1169386417}
@@ -3115,6 +3135,9 @@ GameObject:
   - component: {fileID: 1525726272}
   - component: {fileID: 1525726275}
   - component: {fileID: 1525726276}
+
+  - component: {fileID: 1525726277}
+  - component: {fileID: 1525726278}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3142,9 +3165,6 @@ MonoBehaviour:
   shootingScaleMin: 2
   shootingScaleMax: 2.5
   shootingStarAmountforAlien: 3
-  twirlMaxScale: 0.1
-  twirlMinScale: 0.03
-  twirlStartMinScale: 0.01
   forceAmountMin: 7
   forceAmountMax: 17
   shootingStarStartPosXMin: 35
@@ -3162,6 +3182,10 @@ MonoBehaviour:
     secondaryColor: {r: 0, g: 1, b: 0, a: 0}
   - mainColor: {r: 0, g: 0.059907913, b: 1, a: 0}
     secondaryColor: {r: 1, g: 0, b: 1, a: 0}
+  twirlMaxScale: 0.1
+  twirlMinScale: 0.04
+  twirlStartMinScale: 0.01
+  twirlDelay: 0.2
   capturedStarArea: {fileID: 1428611929}
   scaleMin: 1
   scaleMax: 1.5
@@ -3183,6 +3207,15 @@ MonoBehaviour:
   delayCapture: 0.5
   spawnVFXDelay: 0.4
   spawnStarDelay: 0.5
+  starAudioClips:
+  - {fileID: 8300000, guid: 88fb77aa0dfea446c965de75c10930ec, type: 3}
+  - {fileID: 8300000, guid: 0315d1e68a7ec4439bd3136ad620e74b, type: 3}
+  - {fileID: 8300000, guid: d783d5ac5bf8d4dee8a0371dc5d4bb72, type: 3}
+  - {fileID: 8300000, guid: af0204041944e4b3fb7f71a8c3b4b41d, type: 3}
+  - {fileID: 8300000, guid: c277eeb566bed4cdb851ef417ce5c19e, type: 3}
+  - {fileID: 8300000, guid: 73fc56d0d70884337925decbafed7103, type: 3}
+  - {fileID: 8300000, guid: f6256da55189c465dba3973f1ee7dc3d, type: 3}
+  shootingStarAudioClips: []
   alienPrefabs:
   - {fileID: 4061845067365941267, guid: 753f7caec226a034dbc262348c7cdfbc, type: 3}
   - {fileID: 5577810539883512509, guid: 958947c9dd82b9a4d93c65b9cf657bba, type: 3}
@@ -3190,6 +3223,15 @@ MonoBehaviour:
   - {fileID: 8955133575577228912, guid: 1a25dcc1ba4fc054ba713bbf888db65b, type: 3}
   mergeSpeed: 2
   alienConstantZPos: -20
+  alienRotationSpeedMin: 10
+  alienRotationSpeedMax: 15
+  alienShrinkSpeedMin: 0.5
+  alienShrinkSpeedMax: 0.8
+  alienBackwardsSpeed: 0.15
+  alienPopDuration: 0.2
+  alienStartMinScale: 0.8
+  alienStartMaxScale: 1.2
+  alienOGScale: 1
   spawnedStars: []
   shootingStars: []
   capturedStars: []
@@ -3244,6 +3286,35 @@ MonoBehaviour:
   flipY: 1
   swapXY: 0
   hoverSeconds: 0.2
+--- !u!114 &1525726277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525726271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b8a1e331db8714283e00adfcb10354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionCamera: {fileID: 1779416122}
+  rayDistanceStar: 40
+  rayDistanceShootingStar: 35
+--- !u!114 &1525726278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525726271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c156c14ac584857a5efab2efe87466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundClip: {fileID: 0}
+  volume: 0.5
 --- !u!1 &1554344513
 GameObject:
   m_ObjectHideFlags: 0

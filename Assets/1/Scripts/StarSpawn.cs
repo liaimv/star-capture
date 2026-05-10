@@ -27,9 +27,6 @@ public class StarSpawn : MonoBehaviour
     public float shootingScaleMin = 1.5f;
     public float shootingScaleMax = 2.5f;
     public int shootingStarAmountforAlien = 5;
-    public float twirlMaxScale = 0.11f;
-    public float twirlMinScale = 0.04f;
-    public float twirlStartMinScale = 0.01f;
 
     [Header("Shooting Star Transform Variables")]
     public float forceAmountMin = 10f;
@@ -43,6 +40,12 @@ public class StarSpawn : MonoBehaviour
 
     [Header("Shooting Star Visual Variables")]
     public List<ShootingStarColorPair> shootingStarColors;
+
+    [Header("Twirl Variable")]
+    public float twirlMaxScale = 0.11f;
+    public float twirlMinScale = 0.04f;
+    public float twirlStartMinScale = 0.01f;
+    public float twirlDelay = 0.2f;
 
     [Header("Captured Star Variables")]
     public GameObject capturedStarArea;
@@ -72,11 +75,26 @@ public class StarSpawn : MonoBehaviour
     public float spawnVFXDelay = 0.5f;
     public float spawnStarDelay = 0.5f;
 
+    [Header("Star Audio")]
+    public List<AudioClip> starAudioClips;         // Same order as starColors list
+    public List<AudioClip> shootingStarAudioClips; // Same order as shootingStarColors list
+
     [Header("Alien Variables")]
     public List<GameObject> alienPrefabs;
     public float mergeSpeed = 5f;
     public float alienConstantZPos = -7f;
     private Dictionary<int, List<GameObject>> shootingStarGroups = new Dictionary<int, List<GameObject>>();
+
+    [Header("Alien Transform Variables")]
+    public float alienRotationSpeedMin = 2f;
+    public float alienRotationSpeedMax = 6f;
+    public float alienShrinkSpeedMin = 0.005f;
+    public float alienShrinkSpeedMax = 0.01f;
+    public float alienBackwardsSpeed;
+    public float alienPopDuration = 0.2f;
+    public float alienStartMinScale = 0.9f;
+    public float alienStartMaxScale = 1.1f;
+    public float alienOGScale = 1f;
 
     [HideInInspector]
     public List<GameObject> spawnedStars = new List<GameObject>();
@@ -210,9 +228,14 @@ public class StarSpawn : MonoBehaviour
                 spawnedStars.Add(newStarParent);
 
                 //Random color
-                Color randomColor = starColors[Random.Range(0, starColors.Count)];
+                int colorIndex = Random.Range(0, starColors.Count);
+                Color randomColor = starColors[colorIndex];
                 Renderer renderer = newStar.GetComponent<Renderer>();
                 renderer.material.SetColor("_EmissionColor", randomColor);
+
+                // Assign matching audio clip to this star
+                AudioClip starClip = (colorIndex < starAudioClips.Count) ? starAudioClips[colorIndex] : null;
+                newStarParent.GetComponent<StarAudio>()?.SetClip(starClip);
 
                 VisualEffect spawnVFX = newStar.transform.GetChild(1).GetComponent<VisualEffect>();
                 MeshRenderer starRenderer = newStar.GetComponent<MeshRenderer>();
@@ -290,6 +313,10 @@ public class StarSpawn : MonoBehaviour
         shootingStarRenderer.material.SetColor("_MainColor", colorPair.mainColor);
         shootingStarRenderer.material.SetColor("_SecondaryColor", colorPair.secondaryColor);
 
+        // Assign matching audio clip to this shooting star
+        AudioClip shootingClip = (colorIndex < shootingStarAudioClips.Count) ? shootingStarAudioClips[colorIndex] : null;
+        shootingStarParent.GetComponent<StarAudio>()?.SetClip(shootingClip);
+
         //Shooting star sparkles VFX color
         VisualEffect sparklesVFX = shootingStar.transform.GetChild(1).GetComponent<VisualEffect>();
         sparklesVFX.SetVector4("MainColor", colorPair.mainColor);
@@ -346,6 +373,9 @@ public class StarSpawn : MonoBehaviour
             starCol = star.GetComponent<MeshRenderer>().material.GetColor("_SecondaryColor");
             shootingStars.Remove(starParent);
         }
+
+        // Play the color-matched capture sound
+        starParent.GetComponent<StarAudio>()?.PlayCaptureSound();
 
         //Captured VFX
         captureImpact = star.transform.GetChild(0).GetComponent<VisualEffect>();
@@ -481,7 +511,7 @@ public class StarSpawn : MonoBehaviour
 
     IEnumerator MergeAlienTwirlDelay(List<GameObject> group, Vector3 targetPosition, int typeIndex, GameObject twirlObject)
     {
-        yield return new WaitForSeconds(delayCapture + 2f);
+        yield return new WaitForSeconds(delayCapture + 0.5f);
 
         twirlObject.SetActive(true);
         StartCoroutine(MergeAlienAfterDelay(group, targetPosition, typeIndex, twirlObject));
@@ -508,8 +538,6 @@ public class StarSpawn : MonoBehaviour
         twirlObject.transform.localScale = twirlObjectMaxScale;
 
 
-        //yield return new WaitForSeconds(delayCapture + 1f);
-
         //Move shooting star to each other
         float elapsed = 0f;
         while (elapsed < 1f)
@@ -527,6 +555,8 @@ public class StarSpawn : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        yield return new WaitForSeconds(twirlDelay);
 
         //Remove shootingStar from capturedStars list and Destroy
         foreach (GameObject shootingStar in group)

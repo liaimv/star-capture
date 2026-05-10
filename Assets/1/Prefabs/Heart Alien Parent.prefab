@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2490651065832352254}
   - component: {fileID: 7555291730290653829}
   - component: {fileID: 7219942553897612285}
+  - component: {fileID: 2137962954687136843}
   m_Layer: 0
   m_Name: Heart Alien Parent
   m_TagString: Untagged
@@ -82,6 +83,21 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 6.3
   m_Center: {x: 0, y: -0.32, z: 0}
+--- !u!114 &2137962954687136843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8955133575577228912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad07407b33beb24e82ec0dc5f960760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alienRotationSpeedMin: 2
+  alienRotationSpeedMax: 6
+  shrinkSpeed: 0.05
 --- !u!1001 &3999786160524022538
 PrefabInstance:
   m_ObjectHideFlags: 0
