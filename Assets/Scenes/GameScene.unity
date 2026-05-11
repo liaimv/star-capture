@@ -353,12 +353,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81c621b30f3c4db1b7391435928789c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whiteClip: {fileID: 8300000, guid: 73fc56d0d70884337925decbafed7103, type: 3}
-  pinkClip: {fileID: 8300000, guid: d783d5ac5bf8d4dee8a0371dc5d4bb72, type: 3}
-  yellowClip: {fileID: 8300000, guid: f6256da55189c465dba3973f1ee7dc3d, type: 3}
-  redClip: {fileID: 8300000, guid: c277eeb566bed4cdb851ef417ce5c19e, type: 3}
-  greenClip: {fileID: 8300000, guid: 0315d1e68a7ec4439bd3136ad620e74b, type: 3}
-  blueClip: {fileID: 8300000, guid: 88fb77aa0dfea446c965de75c10930ec, type: 3}
+  whiteClip: {fileID: 8300000, guid: 5209e950f58b442b39c6f44f545a318f, type: 3}
+  pinkClip: {fileID: 8300000, guid: 79b91247dd0a74662baf40b1b71371f5, type: 3}
+  yellowClip: {fileID: 8300000, guid: 295a38b006fb246d8be102fb92c2550c, type: 3}
+  redClip: {fileID: 8300000, guid: ec2e1e664d8dd41c6b7c995f16e40ee7, type: 3}
+  greenClip: {fileID: 8300000, guid: 79ab7f774cec942dea03f1c73b0f92e7, type: 3}
+  blueClip: {fileID: 8300000, guid: 238cfc2d168ff415d88d44108990e3ec, type: 3}
   volume: 1
 --- !u!1 &133183552
 GameObject:
@@ -3206,13 +3206,13 @@ MonoBehaviour:
   spawnVFXDelay: 0.4
   spawnStarDelay: 0.5
   starAudioClips:
-  - {fileID: 8300000, guid: 88fb77aa0dfea446c965de75c10930ec, type: 3}
-  - {fileID: 8300000, guid: 0315d1e68a7ec4439bd3136ad620e74b, type: 3}
-  - {fileID: 8300000, guid: d783d5ac5bf8d4dee8a0371dc5d4bb72, type: 3}
-  - {fileID: 8300000, guid: af0204041944e4b3fb7f71a8c3b4b41d, type: 3}
-  - {fileID: 8300000, guid: c277eeb566bed4cdb851ef417ce5c19e, type: 3}
-  - {fileID: 8300000, guid: 73fc56d0d70884337925decbafed7103, type: 3}
-  - {fileID: 8300000, guid: f6256da55189c465dba3973f1ee7dc3d, type: 3}
+  - {fileID: 8300000, guid: 5209e950f58b442b39c6f44f545a318f, type: 3}
+  - {fileID: 8300000, guid: 16b9dd06fed38432eb637ab0936ca671, type: 3}
+  - {fileID: 8300000, guid: 79ab7f774cec942dea03f1c73b0f92e7, type: 3}
+  - {fileID: 8300000, guid: 1cc890a5542094d87bb9db91e3e2aa3f, type: 3}
+  - {fileID: 8300000, guid: e29dd40f188ce4a87a17f12dcdd55a29, type: 3}
+  - {fileID: 8300000, guid: 6476a59595f7c452192dfae770e58876, type: 3}
+  - {fileID: 8300000, guid: 0fbb5a4e19166481dbd16d5e81509da1, type: 3}
   shootingStarAudioClips: []
   alienPrefabs:
   - {fileID: 4061845067365941267, guid: 753f7caec226a034dbc262348c7cdfbc, type: 3}
@@ -3312,7 +3312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundClip: {fileID: 8300000, guid: 7bb7df7fcdc66455db8c9f746f2d1558, type: 3}
-  volume: 0.5
+  volume: 0.455
 --- !u!1 &1554344513
 GameObject:
   m_ObjectHideFlags: 0
